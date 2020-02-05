@@ -101,6 +101,9 @@ INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
 # RISC-V Platform PEI Driver
 INF  Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/Universal/Pei/PlatformPei/PlatformPei.inf
 
+# RISC-V OpenSBI PEI Driver
+INF  RiscVPkg/Universal/RiscVOpenSbi/Pei/RiscVOpenSbiPeim.inf
+
 ################################################################################
 
 [FV.DXEFV]

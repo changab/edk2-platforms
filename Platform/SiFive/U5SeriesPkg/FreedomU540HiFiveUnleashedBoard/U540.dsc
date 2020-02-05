@@ -385,6 +385,8 @@
     NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
   }
 
+  RiscVPkg/Universal/RiscVOpenSbi/Pei/RiscVOpenSbiPeim.inf
+
   Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/Universal/Pei/PlatformPei/PlatformPei.inf {
     <LibraryClasses>
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
