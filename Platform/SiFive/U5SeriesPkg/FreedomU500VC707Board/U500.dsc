@@ -391,6 +391,8 @@
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   }
 
+  RiscVPkg/Universal/RiscVOpenSbi/Pei/RiscVOpenSbiPeim.inf
+
   #
   # DXE Phase modules
   #
