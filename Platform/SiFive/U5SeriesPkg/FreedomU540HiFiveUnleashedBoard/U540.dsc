@@ -442,6 +442,7 @@
   #
   RiscVPkg/Universal/CpuDxe/CpuDxe.inf
   RiscVPkg/Universal/SmbiosDxe/RiscVSmbiosDxe.inf
+  RiscVPkg/Universal/FdtDxe/FdtDxe.inf
 
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
