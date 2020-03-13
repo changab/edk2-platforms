@@ -103,6 +103,8 @@
 # RISC-V Core Library
   RiscVOpensbiLib|RiscVPkg/Library/RiscVOpensbiLib/RiscVOpensbiLib.inf
 
+  FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
+
 !ifdef $(SOURCE_DEBUG_ENABLE)
   PeCoffExtraActionLib|SourceLevelDebugPkg/Library/PeCoffExtraActionLibDebug/PeCoffExtraActionLibDebug.inf
   DebugCommunicationLib|SourceLevelDebugPkg/Library/DebugCommunicationLibSerialPort/DebugCommunicationLibSerialPort.inf
@@ -527,3 +529,7 @@
 !endif
 
   MdeModulePkg/Application/UiApp/UiApp.inf
+
+# RAMDISK
+  MdeModulePkg/Universal/Disk/RamDiskDxe/RamDiskDxe.inf
+  FatPkg/EnhancedFatDxe/Fat.inf
