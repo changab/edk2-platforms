@@ -27,6 +27,7 @@
 #define SBI_TIME_EXT                   0x54494D45
 #define SBI_IPI_EXT                    0x735049
 #define SBI_RFNC_EXT                   0x52464E43
+#define SBI_FW_EXT                     0x0A000001
 
 #define SBI_GET_SPEC_VERSION_FUNC      0
 #define SBI_GET_IMPL_ID_FUNC           1

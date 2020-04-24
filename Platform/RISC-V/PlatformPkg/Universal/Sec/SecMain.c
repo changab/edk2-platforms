@@ -17,6 +17,7 @@
 #include <sbi/sbi_scratch.h>  // Reference to header file in opensbi
 #include <sbi/sbi_platform.h> // Reference to header file in opensbi
 #include <sbi/sbi_init.h>     // Reference to header file in opensbi
+#include <sbi/sbi_ecall.h>    // Reference to header file in opensbi
 
 #define DEBUG_MSG_HART_INFO 0
 
@@ -391,11 +392,76 @@ EFI_STATUS EFIAPI TemporaryRamDone (VOID)
   return EFI_SUCCESS;
 }
 
-VOID
+/** Handles SBI calls of EDK2's SBI FW extension
+
+  @param[in]  ScratchSpace MSCRATCH of the calling hart.
+  @param[in]  ExtId        The extension ID of the FW extension.
+  @param[in]  FuncId       The called function ID.
+  @param[in]  Args         The args to the function.
+  @param[out] OutVal       The value the function returns to the caller.
+  @param[out] OutTrap      Trap info for trapping further, see OpenSBI code.
+                           Is ignored if return value is not SBI_ETRAP.
+
+  @retval 0                If the handler succeeds.
+  @retval SBI_ENOTSUPP     If there's no function with the given ID.
+  @retval SBI_ETRAP        If the called SBI functions wants to trap further.
+**/
+STATIC int SbiEcallFirmwareHandler (
+  IN  struct sbi_scratch   *ScratchSpace,
+  IN  unsigned long         ExtId,
+  IN  unsigned long         FuncId,
+  IN  unsigned long        *Args,
+  OUT unsigned long        *OutVal,
+  OUT struct sbi_trap_info *OutTrap
+  )
+{
+  int Ret = 0;
+
+  switch (FuncId) {
+    case SBI_EXT_FW_MSCRATCH_FUNC:
+      *OutVal = (unsigned long) sbi_scratch_thishart_ptr();
+      break;
+    case SBI_EXT_FW_MSCRATCH_HARTID_FUNC:
+      *OutVal = (unsigned long) sbi_hart_id_to_scratch(sbi_scratch_thishart_ptr(), Args[0]);
+      break;
+    default:
+      Ret = SBI_ENOTSUPP;
+  };
+
+  return Ret;
+}
+
+struct sbi_ecall_extension FirmwareEcall = {
+  .extid_start = SBI_FW_EXT,
+  .extid_end = SBI_FW_EXT,
+  .handle = SbiEcallFirmwareHandler,
+};
+
+/** Register EDK2's SBI extension with OpenSBI
+
+  This function returns EFI_STATUS, even though it only ever returns
+  EFI_SUCCESS. On error it ASSERTs. Looking at OpenSBI code it appears that
+  registering an extension can only fail if the extension ID is invalid or was
+  already registered. Failure is therefore an error of the programmer.
+
+  @retval EFI_SUCCESS If the extension was successfully registered.
+**/
+EFI_STATUS
 EFIAPI
-PeiCore (
-  IN  UINTN ThisHartId
-)
+RegisterFirmwareSbiExtension()
+{
+  UINTN Ret;
+  Ret = sbi_ecall_register_extension(&FirmwareEcall);
+  if (Ret) {
+    // Only fails if the extension ID is invalid or already is registered
+    DEBUG ((DEBUG_ERROR, "Failed to register SBI Firmware Extension for EDK2\n"));
+    ASSERT(FALSE);
+  }
+
+  return EFI_SUCCESS;
+}
+
+VOID EFIAPI PeiCore ()
 {
   EFI_SEC_PEI_HAND_OFF        SecCoreData;
   EFI_PEI_CORE_ENTRY_POINT    PeiCoreEntryPoint;
@@ -471,6 +537,23 @@ PeiCore (
   (*PeiCoreEntryPoint) (&SecCoreData, (EFI_PEI_PPI_DESCRIPTOR *)&mPrivateDispatchTable);
 }
 
+/**
+  Register firmware SBI extension and launch PeiCore in S-Mode
+
+  To register the SBI extension we stay in M-Mode and then transition here,
+  rather than before in sbi_init.
+**/
+VOID
+EFIAPI
+LaunchPeiCoreSMode (
+  IN  UINTN ThisHartId
+  )
+{
+  RegisterFirmwareSbiExtension ();
+
+  sbi_hart_switch_mode(0, 0, (UINTN) PeiCore, PRV_S, FALSE);
+}
+
 VOID
 EFIAPI
 RiscVOpenSbiHartSwitchMode (
@@ -542,8 +625,8 @@ VOID EFIAPI SecCoreStartUpWithStack(UINTN HartId, struct sbi_scratch *Scratch)
   for (;;);
 #endif
   if (HartId == FixedPcdGet32(PcdBootHartId)) {
-    Scratch->next_addr = (UINTN)PeiCore;
-    Scratch->next_mode = PRV_S;
+    Scratch->next_addr = (UINTN)LaunchPeiCoreSMode;
+    Scratch->next_mode = PRV_M;
     DEBUG ((DEBUG_INFO, "%a: Initializing OpenSBI library for booting hart\n", __FUNCTION__));
     sbi_init(Scratch);
   }
