@@ -11,6 +11,7 @@
 #include <IndustryStandard/RiscVOpensbi.h>
 #include <Library/DebugPrintErrorLevelLib.h>
 #include <Library/PrintLib.h>
+#include <Ppi/RiscVOpenSbiPpi.h>
 #include <sbi/sbi_console.h>  // Reference to header file in opensbi
 #include <sbi/sbi_hart.h>     // Reference to header file in opensbi
 #include <sbi/sbi_scratch.h>  // Reference to header file in opensbi
@@ -19,11 +20,23 @@
 
 #define DEBUG_MSG_HART_INFO 0
 
+extern PEI_RISCV_OPENSBI_BASE_PPI     mOpenSbiBasePpi;   
+extern PEI_RISCV_OPENSBI_HSM_PPI      mOpenSbiHsmPpi;    
+extern PEI_RISCV_OPENSBI_TIME_PPI     mOpenSbiTimePpi;   
+extern PEI_RISCV_OPENSBI_IPI_PPI      mOpenSbiIpiPpi;    
+extern PEI_RISCV_OPENSBI_RFNC_PPI     mOpenSbiRfncPpi;   
+extern PEI_RISCV_OPENSBI_VENDOR_PPI   mOpenSbiVendorPpi; 
+extern PEI_RISCV_OPENSBI_LIBRARY_PPI  mOpenSbiLibraryPpi;
+extern PEI_RISCV_OPENSBI_LEGACY_PPI   mOpenSbiLegacyPpi; 
+extern PEI_RISCV_OPENSBI_FIRMWARE_PPI mOpenSbiFirmwarePpi; 
+
+static
 EFIAPI
 struct sbiret sbi_get_mscratch() {
   return sbi_call_new_0(SBI_FW_EXT, 0x0);
 }
 
+static
 EFIAPI
 struct sbiret sbi_get_mscratch_hartid(UINTN Hartid) {
   return sbi_call_new_1(SBI_FW_EXT, 0x1, Hartid);
@@ -40,6 +53,53 @@ STATIC EFI_PEI_TEMPORARY_RAM_DONE_PPI mTemporaryRamDonePpi = {
 };
 
 STATIC EFI_PEI_PPI_DESCRIPTOR mPrivateDispatchTable[] = {
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiBasePpiGuid,
+    &mOpenSbiBasePpi
+  },
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiLegacyPpiGuid,
+    &mOpenSbiLegacyPpi
+  },
+  // HSM is not implemented in OpenSBI 0.6 but defined in SBI 0.2
+  // Neeed to upgrade to OpenSBI 0.7
+  //{
+  //  EFI_PEI_PPI_DESCRIPTOR_PPI,
+  //  &gOpenSbiHsmPpiGuid,
+  //  &mOpenSbiHsmPpi
+  //},
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiTimePpiGuid,
+    &mOpenSbiTimePpi
+  },
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiIpiPpiGuid,
+    &mOpenSbiIpiPpi
+  },
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiRfncPpiGuid,
+    &mOpenSbiRfncPpi
+  },
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiVendorPpiGuid,
+    &mOpenSbiVendorPpi
+  },
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiLibraryPpiGuid,
+    &mOpenSbiLibraryPpi
+  },
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gOpenSbiFirmwarePpiGuid,
+    &mOpenSbiFirmwarePpi
+  },
   {
     EFI_PEI_PPI_DESCRIPTOR_PPI,
     &gEfiTemporaryRamSupportPpiGuid,

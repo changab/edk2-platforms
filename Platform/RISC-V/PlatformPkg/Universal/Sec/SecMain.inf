@@ -23,6 +23,7 @@
 
 [Sources]
   SecMain.c
+  RiscVOpenSbiPpi.c
 
 [Sources.RISCV64]
   Riscv64/SecEntry.S
@@ -52,6 +53,16 @@
 [Ppis]
   gEfiTemporaryRamSupportPpiGuid # PPI ALWAYS_PRODUCED
   gEfiTemporaryRamDonePpiGuid    # PPI ALWAYS_PRODUCED
+
+  gOpenSbiBasePpiGuid         # PPI ALWAYS_PRODUCED
+  gOpenSbiLegacyPpiGuid       # PPI ALWAYS_PRODUCED
+  gOpenSbiHsmPpiGuid          # PPI ALWAYS_PRODUCED
+  gOpenSbiTimePpiGuid         # PPI ALWAYS PRODUCED
+  gOpenSbiIpiPpiGuid          # PPI ALWAYS PRODUCED
+  gOpenSbiRfncPpiGuid         # PPI ALWAYS PRODUCED
+  gOpenSbiLibraryPpiGuid      # PPI ALWAYS_PRODUCED
+  gOpenSbiVendorPpiGuid       # PPI ALWAYS PRODUCED
+  gOpenSbiFirmwarePpiGuid     # PPI ALWAYS PRODUCED
 
 [FixedPcd]
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdRiscVPeiFvBase
