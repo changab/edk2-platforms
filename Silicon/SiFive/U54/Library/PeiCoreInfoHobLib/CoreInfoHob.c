@@ -8,6 +8,7 @@
 **/
 
 #include <IndustryStandard/RiscVOpensbi.h>
+#include <Library/RiscVEdk2SbiLib.h>
 
 //
 // The package level header files this module uses

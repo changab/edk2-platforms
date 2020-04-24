@@ -22,15 +22,6 @@
 #define SBI_ERR_INVALID_ADDRESS       -5
 #define SBI_ERR_ALREADY_AVAILABLE     -6
 
-#define SBI_SET_TIMER_EXT              0
-#define SBI_CONSOLE_PUTCHAR_EXT        1
-#define SBI_CONSOLE_GETCHAR_EXT        2
-#define SBI_CLEAR_IPI_EXT              3
-#define SBI_SEND_IPI_EXT               4
-#define SBI_REMOTE_FENCE_I_EXT         5
-#define SBI_REMOTE_SFENCE_VMA_EXT      6
-#define SBI_REMOTE_SFENCE_VMA_ASID_EXT 7
-#define SBI_SHUTDOWN_EXT               8
 #define SBI_BASE_EXT                   0x10
 #define SBI_HSM_EXT                    0x48534D
 #define SBI_TIME_EXT                   0x54494D45

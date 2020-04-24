@@ -24,6 +24,7 @@
 #include <Library/PcdLib.h>
 #include <Library/ResourcePublicationLib.h>
 
+#include <Library/RiscVEdk2SbiLib.h>
 #include <ProcessorSpecificHobData.h>
 #include <RiscVImpl.h>
 #include <sbi/sbi_hart.h>

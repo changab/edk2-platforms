@@ -104,6 +104,25 @@
 #define RISCV_CSR_SUPERVISOR_STVAL      0x143
 #define RISCV_CSR_SUPERVISOR_SIP        0x144
 
+#define RISCV_CAUSE_MISALIGNED_FETCH        0x0
+#define RISCV_CAUSE_FETCH_ACCESS            0x1
+#define RISCV_CAUSE_ILLEGAL_INSTRUCTION     0x2
+#define RISCV_CAUSE_BREAKPOINT              0x3
+#define RISCV_CAUSE_MISALIGNED_LOAD         0x4
+#define RISCV_CAUSE_LOAD_ACCESS             0x5
+#define RISCV_CAUSE_MISALIGNED_STORE        0x6
+#define RISCV_CAUSE_STORE_ACCESS            0x7
+#define RISCV_CAUSE_USER_ECALL              0x8
+#define RISCV_CAUSE_HYPERVISOR_ECALL        0x9
+#define RISCV_CAUSE_SUPERVISOR_ECALL        0xa
+#define RISCV_CAUSE_MACHINE_ECALL           0xb
+#define RISCV_CAUSE_FETCH_PAGE_FAULT        0xc
+#define RISCV_CAUSE_LOAD_PAGE_FAULT         0xd
+#define RISCV_CAUSE_STORE_PAGE_FAULT        0xf
+#define RISCV_CAUSE_FETCH_GUEST_PAGE_FAULT  0x14
+#define RISCV_CAUSE_LOAD_GUEST_PAGE_FAULT   0x15
+#define RISCV_CAUSE_STORE_GUEST_PAGE_FAULT  0x17
+
 //
 // Machine Read-Write Shadow of Hypervisor Read-Only Registers
 //

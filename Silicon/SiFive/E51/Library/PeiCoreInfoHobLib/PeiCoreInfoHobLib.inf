@@ -37,6 +37,7 @@
   MemoryAllocationLib
   PcdLib
   PrintLib
+  RiscVEdk2SbiLib
 
 [FixedPcd]
   gEfiSiFiveSiliconTokenSpaceGuid.PcdSiFiveE51CoreGuid
@@ -44,4 +45,3 @@
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSmbiosType4GuidHobGuid
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSmbiosType7GuidHobGuid
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSpecificDataGuidHobGuid
-

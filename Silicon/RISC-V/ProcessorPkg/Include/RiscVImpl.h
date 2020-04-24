@@ -10,6 +10,7 @@
 #ifndef RISCV_H_
 #define RISCV_H_
 
+#include <Uefi.h>
 #include <IndustryStandard/RiscV.h>
 
 #define _ASM_FUNC(Name, Section)    \

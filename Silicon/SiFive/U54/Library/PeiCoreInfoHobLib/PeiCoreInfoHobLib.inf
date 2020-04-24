@@ -37,7 +37,7 @@
   MemoryAllocationLib
   PrintLib
   FirmwareContextProcessorSpecificLib
-
+  RiscVEdk2SbiLib
 
 [FixedPcd]
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSpecificDataGuidHobGuid
@@ -45,4 +45,3 @@
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSmbiosType4GuidHobGuid
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSmbiosType7GuidHobGuid
   gEfiSiFiveSiliconTokenSpaceGuid.PcdSiFiveU54CoreGuid
-
