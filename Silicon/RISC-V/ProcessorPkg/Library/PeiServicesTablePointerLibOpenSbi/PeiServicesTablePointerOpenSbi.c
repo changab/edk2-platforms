@@ -14,6 +14,11 @@
 #include <sbi/sbi_scratch.h>
 #include <sbi/sbi_platform.h>
 
+EFIAPI
+struct sbiret sbi_get_mscratch() {
+  return sbi_call_new_0(SBI_FW_EXT, 0x0);
+}
+
 /**
   Caches a pointer PEI Services Table.
 
@@ -34,7 +39,10 @@ SetPeiServicesTablePointer (
   struct sbi_platform *ThisSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
 
-  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(sbi_scratch_thishart_ptr());
+  struct sbiret mscratch = sbi_get_mscratch();
+  struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
+
+  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ScratchSpace);
   FirmwareContext = (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *)ThisSbiPlatform->firmware_context;
   FirmwareContext->PeiServiceTable = (VOID *)(UINTN)PeiServicesTablePointer;
 
@@ -65,7 +73,10 @@ GetPeiServicesTablePointer (
   struct sbi_platform *ThisSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
 
-  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(sbi_scratch_thishart_ptr());
+  struct sbiret mscratch = sbi_get_mscratch();
+  struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
+
+  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ScratchSpace);
   FirmwareContext = (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *)ThisSbiPlatform->firmware_context;
   return (CONST EFI_PEI_SERVICES **)FirmwareContext->PeiServiceTable;
 }

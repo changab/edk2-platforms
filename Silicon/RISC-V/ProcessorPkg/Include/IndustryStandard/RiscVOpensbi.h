@@ -14,6 +14,11 @@
 #include <RiscVImpl.h>
 #include <sbi/sbi_types.h>  // Reference to header file wrapper
 
+struct sbiret {
+  long error;
+  long value;
+};
+
 #define SBI_SUCCESS                    0
 #define SBI_ERR_FAILED                -1
 #define SBI_ERR_NOT_SUPPORTED         -2
@@ -36,6 +41,7 @@
 #define SBI_TIME_EXT                   0x54494D45
 #define SBI_IPI_EXT                    0x735049
 #define SBI_RFNC_EXT                   0x52464E43
+#define SBI_FW_EXT                     0x0A000000
 
 #define SBI_GET_SPEC_VERSION_FUNC      0
 #define SBI_GET_IMPL_ID_FUNC           1
@@ -65,6 +71,32 @@
         a0; \
 })
 
+inline
+EFIAPI
+struct sbiret sbi_call_new(UINTN ext_id, UINTN func_id, UINTN arg0, UINTN arg1,
+                           UINTN arg2, UINTN arg3, UINTN arg4, UINTN arg5)
+__attribute__((always_inline));
+
+inline
+EFIAPI
+struct sbiret sbi_call_new(UINTN ext_id, UINTN func_id, UINTN arg0, UINTN arg1,
+                           UINTN arg2, UINTN arg3, UINTN arg4, UINTN arg5) {
+    register uintptr_t a0 asm ("a0") = (uintptr_t)(arg0);
+    register uintptr_t a1 asm ("a1") = (uintptr_t)(arg1);
+    register uintptr_t a2 asm ("a2") = (uintptr_t)(arg2);
+    register uintptr_t a3 asm ("a3") = (uintptr_t)(arg3);
+    register uintptr_t a4 asm ("a4") = (uintptr_t)(arg4);
+    register uintptr_t a5 asm ("a5") = (uintptr_t)(arg5);
+    register uintptr_t a6 asm ("a6") = (uintptr_t)(func_id);
+    register uintptr_t a7 asm ("a7") = (uintptr_t)(ext_id);
+    asm volatile ("ecall" \
+         : "+r" (a0) \
+         : "r" (a1), "r" (a2), "r" (a3), "r" (a4), "r" (a5), "r" (a6), "r" (a7) \
+         : "memory"); \
+    struct sbiret ret = { a0, a1 };
+    return ret;
+}
+
 #define SBI_CALL_0(ext_id, func_id) \
   SBI_CALL(ext_id, func_id, 0, 0, 0, 0, 0, 0)
 #define SBI_CALL_1(ext_id, func_id, arg0) \
@@ -79,6 +111,21 @@
   SBI_CALL(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, 0)
 #define SBI_CALL_6(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, arg5) \
   SBI_CALL(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, arg5)
+
+#define sbi_call_new_0(ext_id, func_id) \
+  sbi_call_new(ext_id, func_id, 0, 0, 0, 0, 0, 0)
+#define sbi_call_new_1(ext_id, func_id, arg0) \
+  sbi_call_new(ext_id, func_id, arg0, 0, 0, 0, 0, 0)
+#define sbi_call_new_2(ext_id, func_id, arg0, arg1) \
+  sbi_call_new(ext_id, func_id, arg0, arg1, 0, 0, 0, 0)
+#define sbi_call_new_3(ext_id, func_id, arg0, arg1, arg2) \
+  sbi_call_new(ext_id, func_id, arg0, arg1, arg2, 0, 0, 0)
+#define sbi_call_new_4(ext_id, func_id, arg0, arg1, arg2, arg3) \
+  sbi_call_new(ext_id, func_id, arg0, arg1, arg2, arg3, 0, 0)
+#define sbi_call_new_5(ext_id, func_id, arg0, arg1, arg2, arg3, arg4) \
+  sbi_call_new(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, 0)
+#define sbi_call_new_6(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, arg5) \
+  sbi_call_new(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, arg5)
 
 // Legacy SBI Extension, Extension IDs 0x00 through 0x0F
 #define sbi_legacy_console_putchar(ch)    SBI_CALL_1(SBI_CONSOLE_PUTCHAR_EXT, 0, ch)
@@ -139,6 +186,20 @@
   SBI_CALL_5(SBI_RFNC_EXT, 5, hart_mask, hart_mask_base, start, size, asid)
 #define sbi_remote_hfence_vvma(hart_mask, hart_mask_base, start, size) \
   SBI_CALL_4(SBI_RFNC_EXT, 6, hart_mask, hart_mask_base, start, size)
+
+// Firmware Extension, Extendsion ID: 
+
+EFIAPI
+struct sbiret sbi_get_mscratch();
+
+EFIAPI
+struct sbiret sbi_get_mscratch_hartid();
+
+//inline
+//EFIAPI
+//struct sbiret sbi_get_mscratch() {
+//  return sbi_call_new_0(SBI_FW_EXT, 0x0);
+//}
 
 #define RISC_V_MAX_HART_SUPPORTED 16
 

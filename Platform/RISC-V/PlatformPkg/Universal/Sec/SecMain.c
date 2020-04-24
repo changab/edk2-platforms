@@ -19,6 +19,16 @@
 
 #define DEBUG_MSG_HART_INFO 0
 
+EFIAPI
+struct sbiret sbi_get_mscratch() {
+  return sbi_call_new_0(SBI_FW_EXT, 0x0);
+}
+
+EFIAPI
+struct sbiret sbi_get_mscratch_hartid(UINTN Hartid) {
+  return sbi_call_new_1(SBI_FW_EXT, 0x1, Hartid);
+}
+
 UINTN HartsIn = 0;
 
 STATIC EFI_PEI_TEMPORARY_RAM_SUPPORT_PPI mTemporaryRamSupportPpi = {
@@ -366,10 +376,13 @@ TemporaryRamMigration (
   CopyMem (NewHeap, OldHeap, CopySize >> 1);   // Migrate Heap
   CopyMem (NewStack, OldStack, CopySize >> 1); // Migrate Stack
 
+  struct sbiret mscratch = sbi_get_mscratch();
+  struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
+
   //
   // Reset firmware context pointer
   //
-  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(sbi_scratch_thishart_ptr());
+  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ScratchSpace);
   ThisSbiPlatform->firmware_context += (unsigned long)((UINTN)NewStack - (UINTN)OldStack);
   //
   // Relocate PEI Service **
@@ -419,8 +432,16 @@ PeiCore (
   //
   DEBUG ((DEBUG_INFO, "%a: OpenSBI scratch address for each hart:\n", __FUNCTION__));
   for (HartId = 0; HartId < FixedPcdGet32 (PcdHartCount); HartId ++) {
-    DEBUG ((DEBUG_INFO, "          Hart %d: 0x%x\n", HartId, sbi_hart_id_to_scratch(sbi_scratch_thishart_ptr(), HartId)));
+    struct sbiret mscratch = sbi_get_mscratch_hartid(HartId);
+    struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
+
+    DEBUG ((DEBUG_INFO, "          Hart %d: 0x%x\n", HartId, ScratchSpace));
   }
+  DEBUG ((DEBUG_INFO, "%a: Helloooo????\n", __FUNCTION__));
+
+
+  struct sbiret mscratch = sbi_get_mscratch();
+  struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
 
   //
   // Set up OpepSBI firmware context pointer on boot hart OpenSbi scratch.
@@ -428,7 +449,7 @@ PeiCore (
   // temporary RAM migration.
   //
   ZeroMem ((VOID *)&FirmwareContext, sizeof (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT));
-  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(sbi_scratch_thishart_ptr());
+  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ScratchSpace);
   if (ThisSbiPlatform->opensbi_version > OPENSBI_VERSION) {
       DEBUG ((DEBUG_ERROR, "%a: OpenSBI platform table version 0x%x is newer than OpenSBI version 0x%x.\n"
                            "There maybe be some backward compatable issues.\n",
@@ -444,12 +465,12 @@ PeiCore (
              &FirmwareContext
              ));
   ThisSbiPlatform->firmware_context = (unsigned long)&FirmwareContext;
-  //
+  
   // Set firmware context Hart-specific pointer
-  //
+  
   for (HartId = 0; HartId < FixedPcdGet32 (PcdHartCount); HartId ++) {
-    FirmwareContext.HartSpecific [HartId] = \
-      (EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *)((UINT8 *)sbi_hart_id_to_scratch(sbi_scratch_thishart_ptr(), HartId) - FIRMWARE_CONTEXT_HART_SPECIFIC_SIZE);
+    FirmwareContext.HartSpecific [HartId] = 
+      (EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *)((UINT8 *)sbi_hart_id_to_scratch(ScratchSpace, HartId) - FIRMWARE_CONTEXT_HART_SPECIFIC_SIZE);
     DEBUG ((DEBUG_INFO, "%a: OpenSBI Hart %d Firmware Context Hart-specific at address: 0x%x\n",
             __FUNCTION__,
              HartId,

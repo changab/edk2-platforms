@@ -65,7 +65,10 @@ CreateU54CoreProcessorSpecificDataHob (
     return EFI_INVALID_PARAMETER;
   }
 
-  ThisHartSbiScratch = sbi_hart_id_to_scratch (sbi_scratch_thishart_ptr(), (UINT32)HartId);
+  struct sbiret mscratch = sbi_get_mscratch();
+  struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
+
+  ThisHartSbiScratch = sbi_hart_id_to_scratch (ScratchSpace, (UINT32)HartId);
   DEBUG ((DEBUG_INFO, "    SBI Scratch is at 0x%x.\n", ThisHartSbiScratch));
   ThisHartSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ThisHartSbiScratch);
   DEBUG ((DEBUG_INFO, "    SBI platform is at 0x%x.\n", ThisHartSbiPlatform));

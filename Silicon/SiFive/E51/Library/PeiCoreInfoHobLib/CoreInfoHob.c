@@ -31,6 +31,11 @@
 #include <sbi/sbi_platform.h>
 #include <SmbiosProcessorSpecificData.h>
 
+EFIAPI
+struct sbiret sbi_get_mscratch_hartid(UINTN Hartid) {
+  return sbi_call_new_1(SBI_FW_EXT, 0x1, Hartid);
+}
+
 /**
   Function to build core specific information HOB. RISC-V SMBIOS DXE driver collect
   this information and build SMBIOS Type44.
@@ -70,7 +75,9 @@ CreateE51CoreProcessorSpecificDataHob (
     return EFI_INVALID_PARAMETER;
   }
 
-  ThisHartSbiScratch = sbi_hart_id_to_scratch (sbi_scratch_thishart_ptr(), (UINT32)HartId);
+  struct sbiret mscratch = sbi_get_mscratch_hartid(HartId);
+  ThisHartSbiScratch = (struct sbi_scratch *)mscratch.value;
+
   DEBUG ((DEBUG_INFO, "    SBI Scratch is at 0x%x.\n", ThisHartSbiScratch));
   ThisHartSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ThisHartSbiScratch);
   DEBUG ((DEBUG_INFO, "    SBI platform is at 0x%x.\n", ThisHartSbiPlatform));
