@@ -8,7 +8,6 @@
 **/
 
 #include <IndustryStandard/RiscVOpensbi.h>
-#include <Library/RiscVEdk2SbiLib.h>
 
 //
 // The package level header files this module uses
@@ -22,6 +21,7 @@
 #include <Library/DebugLib.h>
 #include <Library/FirmwareContextProcessorSpecificLib.h>
 #include <Library/HobLib.h>
+#include <Library/RiscVEdk2SbiLib.h>
 #include <sbi/sbi_hart.h>
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_scratch.h>
@@ -55,8 +55,6 @@ CreateU54CoreProcessorSpecificDataHob (
   RISC_V_PROCESSOR_SPECIFIC_HOB_DATA *CoreGuidHob;
   EFI_GUID *ProcessorSpecDataHobGuid;
   RISC_V_PROCESSOR_SPECIFIC_HOB_DATA ProcessorSpecDataHob;
-  struct sbi_scratch *ThisHartSbiScratch;
-  struct sbi_platform *ThisHartSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
   EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *FirmwareContextHartSpecific;
 
@@ -66,11 +64,7 @@ CreateU54CoreProcessorSpecificDataHob (
     return EFI_INVALID_PARAMETER;
   }
 
-  ThisHartSbiScratch = sbi_hart_id_to_scratch (sbi_scratch_thishart_ptr(), (UINT32)HartId);
-  DEBUG ((DEBUG_INFO, "    SBI Scratch is at 0x%x.\n", ThisHartSbiScratch));
-  ThisHartSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ThisHartSbiScratch);
-  DEBUG ((DEBUG_INFO, "    SBI platform is at 0x%x.\n", ThisHartSbiPlatform));
-  FirmwareContext = (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *)ThisHartSbiPlatform->firmware_context;
+  ASSERT_EFI_ERROR (SbiGetFirmwareContext (&FirmwareContext));
   DEBUG ((DEBUG_INFO, "    Firmware Context is at 0x%x.\n", FirmwareContext));
   FirmwareContextHartSpecific = FirmwareContext->HartSpecific[HartId];
   DEBUG ((DEBUG_INFO, "    Firmware Context Hart specific is at 0x%x.\n", FirmwareContextHartSpecific));

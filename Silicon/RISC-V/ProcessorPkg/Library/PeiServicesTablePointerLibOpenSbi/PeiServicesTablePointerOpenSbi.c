@@ -1,15 +1,15 @@
 /** @file
   PEI Services Table Pointer Library.
 
-  Copyright (c) 2019, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
-#include <IndustryStandard/RiscVOpensbi.h>
 #include <PiPei.h>
 #include <Library/DebugLib.h>
 #include <Library/RiscVCpuLib.h>
+#include <Library/RiscVEdk2SbiLib.h>
 #include <Library/PeiServicesTablePointerLib.h>
 #include <sbi/sbi_scratch.h>
 #include <sbi/sbi_platform.h>
@@ -31,16 +31,14 @@ SetPeiServicesTablePointer (
   IN CONST EFI_PEI_SERVICES ** PeiServicesTablePointer
   )
 {
-  struct sbi_platform *ThisSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
+  SbiGetFirmwareContext (&FirmwareContext);
 
-  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(sbi_scratch_thishart_ptr());
-  FirmwareContext = (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *)ThisSbiPlatform->firmware_context;
   FirmwareContext->PeiServiceTable = (VOID *)(UINTN)PeiServicesTablePointer;
 
   DEBUG ((DEBUG_INFO, "Set PEI Service 0x%x at OpenSBI Firmware Context at 0x%x\n",
          PeiServicesTablePointer,
-         ThisSbiPlatform->firmware_context
+         FirmwareContext
          ));
 }
 
@@ -62,11 +60,9 @@ GetPeiServicesTablePointer (
   VOID
   )
 {
-  struct sbi_platform *ThisSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
+  SbiGetFirmwareContext (&FirmwareContext);
 
-  ThisSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(sbi_scratch_thishart_ptr());
-  FirmwareContext = (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *)ThisSbiPlatform->firmware_context;
   return (CONST EFI_PEI_SERVICES **)FirmwareContext->PeiServiceTable;
 }
 
@@ -101,10 +97,10 @@ PeiServicesTablePointerLibOpenSbiConstructor (
   immediately preceding the Interrupt Descriptor Table (IDT) in memory.
   For X64 CPUs, the PEI Services Table pointer is stored in the 8 bytes
   immediately preceding the Interrupt Descriptor Table (IDT) in memory.
-  For Itanium and ARM CPUs, a the PEI Services Table Pointer is stored in
+  For Itanium, ARM or RISC-V CPUs, a the PEI Services Table Pointer is stored in
   a dedicated CPU register.  This means that there is no memory storage
   associated with storing the PEI Services Table pointer, so no additional
-  migration actions are required for Itanium or ARM CPUs.
+  migration actions are required for Itanium, ARM or RISC-V CPUs.
 
 **/
 VOID

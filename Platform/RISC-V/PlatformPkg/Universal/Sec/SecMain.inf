@@ -48,6 +48,7 @@
   RiscVCpuLib
   RiscVOpensbiLib
   RiscVOpensbiPlatformLib
+  RiscVEdk2SbiLib
 
 [Ppis]
   gEfiTemporaryRamSupportPpiGuid # PPI ALWAYS_PRODUCED

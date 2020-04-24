@@ -8,7 +8,7 @@
 **/
 
 #include "Timer.h"
-#include <IndustryStandard/RiscVOpensbi.h>
+#include <Library/RiscVEdk2SbiLib.h>
 #include <sbi/riscv_asm.h>
 #include <sbi/riscv_encoding.h>
 #include <sbi/riscv_io.h>
@@ -81,7 +81,7 @@ TimerInterruptHandler (
   gBS->RestoreTPL (OriginalTPL);
 
   RiscvTimer = readq_relaxed(p_mtime);
-  sbi_set_timer(RiscvTimer += mTimerPeriod);
+  SbiSetTimer (RiscvTimer += mTimerPeriod);
   csr_set(CSR_SIE, MIP_STIP); // enable timer int
 
 }
@@ -177,7 +177,7 @@ TimerDriverSetTimerPeriod (
   mTimerPeriod = TimerPeriod / 10; // convert unit from 100ns to 1us
 
   RiscvTimer = readq_relaxed(p_mtime);
-  sbi_set_timer(RiscvTimer + mTimerPeriod);
+  SbiSetTimer(RiscvTimer + mTimerPeriod);
 
   mCpu->EnableInterrupt(mCpu);
   csr_set(CSR_SIE, MIP_STIP); // enable timer int
