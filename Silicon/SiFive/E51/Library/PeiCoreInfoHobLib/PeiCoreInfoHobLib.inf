@@ -45,3 +45,5 @@
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSmbiosType7GuidHobGuid
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSpecificDataGuidHobGuid
 
+[Ppis]
+  gOpenSbiFirmwarePpiGuid    ## SOMETIMES_CONSUMES

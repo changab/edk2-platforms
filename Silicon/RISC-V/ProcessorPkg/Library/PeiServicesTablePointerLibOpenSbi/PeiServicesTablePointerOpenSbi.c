@@ -14,6 +14,7 @@
 #include <sbi/sbi_scratch.h>
 #include <sbi/sbi_platform.h>
 
+static
 EFIAPI
 struct sbiret sbi_get_mscratch() {
   return sbi_call_new_0(SBI_FW_EXT, 0x0);
@@ -73,6 +74,8 @@ GetPeiServicesTablePointer (
   struct sbi_platform *ThisSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
 
+  // Question: Is it possible to call PPI here?
+  // The problem is that we need the PeiServicesTable but we would get this through the PPI...
   struct sbiret mscratch = sbi_get_mscratch();
   struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
 

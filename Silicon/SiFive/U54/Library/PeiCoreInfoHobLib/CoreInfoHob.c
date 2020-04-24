@@ -8,6 +8,7 @@
 **/
 
 #include <IndustryStandard/RiscVOpensbi.h>
+#include <Ppi/RiscVOpenSbiPpi.h>
 
 //
 // The package level header files this module uses
@@ -21,6 +22,8 @@
 #include <Library/DebugLib.h>
 #include <Library/FirmwareContextProcessorSpecificLib.h>
 #include <Library/HobLib.h>
+#include <Library/PeiServicesLib.h>
+#include <Library/PeiServicesTablePointerLib.h>
 #include <sbi/sbi_hart.h>
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_scratch.h>
@@ -58,6 +61,8 @@ CreateU54CoreProcessorSpecificDataHob (
   struct sbi_platform *ThisHartSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
   EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *FirmwareContextHartSpecific;
+  PEI_RISCV_OPENSBI_FIRMWARE_PPI         *MScratchPei;
+  EFI_STATUS Status;
 
   DEBUG ((DEBUG_INFO, "%a: Entry.\n", __FUNCTION__));
 
@@ -65,10 +70,21 @@ CreateU54CoreProcessorSpecificDataHob (
     return EFI_INVALID_PARAMETER;
   }
 
-  struct sbiret mscratch = sbi_get_mscratch();
-  struct sbi_scratch *ScratchSpace = (struct sbi_scratch *)mscratch.value;
+  Status = PeiServicesLocatePpi (
+                          &gOpenSbiFirmwarePpiGuid,
+                          0,
+                          NULL,
+                          (VOID **) &MScratchPei
+                          );
+  ASSERT_EFI_ERROR (Status);
+  Status = MScratchPei->OpenSbiGetMscratchHartid(
+													(EFI_PEI_SERVICES **)GetPeiServicesTablePointer (),
+                          MScratchPei,
+                          HartId,
+                          &ThisHartSbiScratch
+                          );
+  ASSERT_EFI_ERROR (Status);
 
-  ThisHartSbiScratch = sbi_hart_id_to_scratch (ScratchSpace, (UINT32)HartId);
   DEBUG ((DEBUG_INFO, "    SBI Scratch is at 0x%x.\n", ThisHartSbiScratch));
   ThisHartSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ThisHartSbiScratch);
   DEBUG ((DEBUG_INFO, "    SBI platform is at 0x%x.\n", ThisHartSbiPlatform));

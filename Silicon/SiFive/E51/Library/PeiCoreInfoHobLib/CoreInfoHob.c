@@ -13,6 +13,7 @@
 #include <PiPei.h>
 
 #include <IndustryStandard/RiscVOpensbi.h>
+#include <Ppi/RiscVOpenSbiPpi.h>
 
 //
 // The Library classes this module consumes
@@ -22,6 +23,8 @@
 #include <Library/FirmwareContextProcessorSpecificLib.h>
 #include <Library/HobLib.h>
 #include <Library/PcdLib.h>
+#include <Library/PeiServicesLib.h>
+#include <Library/PeiServicesTablePointerLib.h>
 #include <Library/ResourcePublicationLib.h>
 
 #include <ProcessorSpecificHobData.h>
@@ -30,11 +33,6 @@
 #include <sbi/sbi_scratch.h>
 #include <sbi/sbi_platform.h>
 #include <SmbiosProcessorSpecificData.h>
-
-EFIAPI
-struct sbiret sbi_get_mscratch_hartid(UINTN Hartid) {
-  return sbi_call_new_1(SBI_FW_EXT, 0x1, Hartid);
-}
 
 /**
   Function to build core specific information HOB. RISC-V SMBIOS DXE driver collect
@@ -68,6 +66,8 @@ CreateE51CoreProcessorSpecificDataHob (
   struct sbi_platform *ThisHartSbiPlatform;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
   EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *FirmwareContextHartSpecific;
+  PEI_RISCV_OPENSBI_FIRMWARE_PPI         *MScratchPei;
+  EFI_STATUS Status;
 
   DEBUG ((DEBUG_INFO, "%a: Entry.\n", __FUNCTION__));
 
@@ -75,8 +75,20 @@ CreateE51CoreProcessorSpecificDataHob (
     return EFI_INVALID_PARAMETER;
   }
 
-  struct sbiret mscratch = sbi_get_mscratch_hartid(HartId);
-  ThisHartSbiScratch = (struct sbi_scratch *)mscratch.value;
+  Status = PeiServicesLocatePpi (
+                          &gOpenSbiFirmwarePpiGuid,
+                          0,
+                          NULL,
+                          (VOID **) &MScratchPei
+                          );
+  ASSERT_EFI_ERROR (Status);
+  Status = MScratchPei->OpenSbiGetMscratchHartid(
+                          (EFI_PEI_SERVICES **)GetPeiServicesTablePointer (),
+                          MScratchPei,
+                          HartId,
+                          &ThisHartSbiScratch
+                          );
+  ASSERT_EFI_ERROR (Status);
 
   DEBUG ((DEBUG_INFO, "    SBI Scratch is at 0x%x.\n", ThisHartSbiScratch));
   ThisHartSbiPlatform = (struct sbi_platform *)sbi_platform_ptr(ThisHartSbiScratch);

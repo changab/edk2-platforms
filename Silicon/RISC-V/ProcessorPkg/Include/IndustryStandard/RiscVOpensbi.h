@@ -187,19 +187,7 @@ struct sbiret sbi_call_new(UINTN ext_id, UINTN func_id, UINTN arg0, UINTN arg1,
 #define sbi_remote_hfence_vvma(hart_mask, hart_mask_base, start, size) \
   SBI_CALL_4(SBI_RFNC_EXT, 6, hart_mask, hart_mask_base, start, size)
 
-// Firmware Extension, Extendsion ID: 
-
-EFIAPI
-struct sbiret sbi_get_mscratch();
-
-EFIAPI
-struct sbiret sbi_get_mscratch_hartid();
-
-//inline
-//EFIAPI
-//struct sbiret sbi_get_mscratch() {
-//  return sbi_call_new_0(SBI_FW_EXT, 0x0);
-//}
+// Firmware Extension, Extension ID: 
 
 #define RISC_V_MAX_HART_SUPPORTED 16
 
