@@ -145,5 +145,9 @@ int sbi_ecall_init(void)
 	if (ret)
 		return ret;
 
+	ret = sbi_ecall_register_extension(&ecall_firmware);
+	if (ret)
+		return ret;
+
 	return 0;
 }

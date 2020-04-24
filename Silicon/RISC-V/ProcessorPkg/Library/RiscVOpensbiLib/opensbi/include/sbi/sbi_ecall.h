@@ -39,6 +39,7 @@ extern struct sbi_ecall_extension ecall_time;
 extern struct sbi_ecall_extension ecall_rfence;
 extern struct sbi_ecall_extension ecall_ipi;
 extern struct sbi_ecall_extension ecall_vendor;
+extern struct sbi_ecall_extension ecall_firmware;
 
 u16 sbi_ecall_version_major(void);
 

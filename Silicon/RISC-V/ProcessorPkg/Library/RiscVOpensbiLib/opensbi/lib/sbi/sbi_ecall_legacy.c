@@ -13,12 +13,14 @@
 #include <sbi/sbi_ecall_interface.h>
 #include <sbi/sbi_error.h>
 #include <sbi/sbi_ipi.h>
+#include <sbi/sbi_scratch.h>
 #include <sbi/sbi_system.h>
 #include <sbi/sbi_timer.h>
 #include <sbi/sbi_tlb.h>
 #include <sbi/sbi_trap.h>
 #include <sbi/sbi_unpriv.h>
 #include <sbi/sbi_hart.h>
+#include <sbi/riscv_asm.h>
 
 static int sbi_load_hart_mask_unpriv(struct sbi_scratch *scratch,
 				     ulong *pmask, ulong *hmask,
@@ -116,4 +118,33 @@ struct sbi_ecall_extension ecall_legacy = {
 	.extid_start = SBI_EXT_0_1_SET_TIMER,
 	.extid_end = SBI_EXT_0_1_SHUTDOWN,
 	.handle = sbi_ecall_legacy_handler,
+};
+
+static int sbi_ecall_firmware_handler(struct sbi_scratch *scratch,
+				    unsigned long extid, unsigned long funcid,
+				    unsigned long *args, unsigned long *out_val,
+				    struct sbi_trap_info *out_trap)
+{
+	int ret = 0;
+
+	switch (funcid) {
+    case SBI_EXT_FW_MSCRATCH:
+    sbi_printf("Hello from SBI 1\n");
+    *out_val = (long unsigned int) sbi_scratch_thishart_ptr();
+    break;
+    case SBI_EXT_FW_MSCRATCH_HARTID:
+    sbi_printf("Hello from SBI 2\n");
+    *out_val = (long unsigned int) sbi_hart_id_to_scratch(sbi_scratch_thishart_ptr(), args[0]);
+    break;
+	default:
+		ret = SBI_ENOTSUPP;
+	};
+
+	return ret;
+}
+
+struct sbi_ecall_extension ecall_firmware = {
+	.extid_start = SBI_EXT_FW,
+	.extid_end = SBI_EXT_FW,
+	.handle = sbi_ecall_firmware_handler,
 };
