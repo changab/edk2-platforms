@@ -16,7 +16,7 @@
   LIBRARY_CLASS  = RiscVEdk2SbiLib
 
 [Sources]
-  RiscVOpenSbiLib.c
+  RiscVEdk2SbiLib.c
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -25,5 +25,4 @@
 
 [LibraryClasses]
   BaseLib
-  RiscVEdk2SbiLib
   RiscVOpensbiLib

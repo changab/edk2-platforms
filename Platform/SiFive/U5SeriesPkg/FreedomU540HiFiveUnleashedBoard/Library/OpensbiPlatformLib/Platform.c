@@ -101,7 +101,7 @@ static int U540_final_init(bool cold_boot)
     // This region only protects SEC, PEI and Scratch buffer.
     //
     ThisScratch = sbi_scratch_thishart_ptr ();
-    pmp_set(0, PMP_R | PMP_X, ThisScratch->fw_start, log2roundup (ThisScratch->fw_size));
+    pmp_set(0, PMP_R | PMP_X | PMP_W, ThisScratch->fw_start, log2roundup (ThisScratch->fw_size));
     return 0;
 }
 

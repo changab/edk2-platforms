@@ -6,17 +6,102 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
-#ifndef _RISCV_SBI_LIB_H_
-#define _RISCV_SBI_LIB_H_
+#ifndef RISCV_SBI_LIB_H_
+#define RISCV_SBI_LIB_H_
 
 #include <Uefi.h>
 #include <IndustryStandard/RiscVOpensbi.h>
 #include <sbi/sbi_scratch.h>
 #include <sbi/sbi_platform.h>
 
-#define SBI_FW_EXT                      0x0A000001
+//
+// EDK2 OpenSBI Firmware extension.
+//
+#define SBI_EDK2_FW_EXT (SBI_EXT_FIRMWARE_CODE_BASE_START | SBI_OPENSBI_IMPID)
+//
+// EDK2 OpenSBI Firmware extension functions.
+//
 #define SBI_EXT_FW_MSCRATCH_FUNC        0
 #define SBI_EXT_FW_MSCRATCH_HARTID_FUNC 1
+
+//
+// EDK2 OpenSBI firmware extension return status.
+//
+struct sbiret {
+  long error;   ///< SBI status code
+  long value;   ///< Value returned
+};
+
+#define sbi_call_0(ext_id, func_id) \
+  sbi_call(ext_id, func_id, 0, 0, 0, 0, 0, 0)
+#define sbi_call_1(ext_id, func_id, arg0) \
+  sbi_call(ext_id, func_id, arg0, 0, 0, 0, 0, 0)
+#define sbi_call_2(ext_id, func_id, arg0, arg1) \
+  sbi_call(ext_id, func_id, arg0, arg1, 0, 0, 0, 0)
+#define sbi_call_3(ext_id, func_id, arg0, arg1, arg2) \
+  sbi_call(ext_id, func_id, arg0, arg1, arg2, 0, 0, 0)
+#define sbi_call_4(ext_id, func_id, arg0, arg1, arg2, arg3) \
+  sbi_call(ext_id, func_id, arg0, arg1, arg2, arg3, 0, 0)
+#define sbi_call_5(ext_id, func_id, arg0, arg1, arg2, arg3, arg4) \
+  sbi_call(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, 0)
+#define sbi_call_6(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, arg5) \
+  sbi_call(ext_id, func_id, arg0, arg1, arg2, arg3, arg4, arg5)
+
+/**
+  EDK2 sbi_call to invoke SBI extensions.
+
+  @param[in] ext_id   Sbi extension ID.
+  @param[in] func_id  Sbi functions ID.
+  @param[in] arg0     Arg0 to function.
+  @param[in] arg1     Arg1 to function.
+  @param[in] arg2     Arg2 to function.
+  @param[in] arg3     Arg3 to function.
+  @param[in] arg4     Arg4 to function.
+  @param[in] arg5     Arg5 to function.
+
+  @retval  Returns sbiret structure.
+
+**/
+inline
+EFIAPI
+struct sbiret sbi_call(UINTN ext_id, UINTN func_id, UINTN arg0, UINTN arg1,
+                           UINTN arg2, UINTN arg3, UINTN arg4, UINTN arg5)
+__attribute__((always_inline));
+
+/**
+  EDK2 sbi_call to invoke SBI extensions.
+
+  @param[in] ext_id   Sbi extension ID.
+  @param[in] func_id  Sbi functions ID.
+  @param[in] arg0     Arg0 to function.
+  @param[in] arg1     Arg1 to function.
+  @param[in] arg2     Arg2 to function.
+  @param[in] arg3     Arg3 to function.
+  @param[in] arg4     Arg4 to function.
+  @param[in] arg5     Arg5 to function.
+
+  @retval  Returns sbiret structure.
+
+**/
+inline
+EFIAPI
+struct sbiret sbi_call(UINTN ext_id, UINTN func_id, UINTN arg0, UINTN arg1,
+                           UINTN arg2, UINTN arg3, UINTN arg4, UINTN arg5) {
+    register uintptr_t a0 asm ("a0") = (uintptr_t)(arg0);
+    register uintptr_t a1 asm ("a1") = (uintptr_t)(arg1);
+    register uintptr_t a2 asm ("a2") = (uintptr_t)(arg2);
+    register uintptr_t a3 asm ("a3") = (uintptr_t)(arg3);
+    register uintptr_t a4 asm ("a4") = (uintptr_t)(arg4);
+    register uintptr_t a5 asm ("a5") = (uintptr_t)(arg5);
+    register uintptr_t a6 asm ("a6") = (uintptr_t)(func_id);
+    register uintptr_t a7 asm ("a7") = (uintptr_t)(ext_id);
+    asm volatile ("ecall" \
+         : "+r" (a0) \
+         : "r" (a1), "r" (a2), "r" (a3), "r" (a4), "r" (a5), "r" (a6), "r" (a7) \
+         : "memory"); \
+    struct sbiret ret = { a0, a1 };
+    return ret;
+}
 
 /**
   Get the implemented SBI specification version
@@ -132,12 +217,12 @@ SbiGetMimpId (
                                    a1 when the hart starts.
   @retval EFI_SUCCESS              Hart was stopped and will start executing from StartAddr.
   @retval EFI_LOAD_ERROR           StartAddr is not valid, possibly due to following reasons:
-                                   - It is not a valid physical address.
-																	 - The address is prohibited by PMP to run in
-																	   supervisor mode.
-	@retval EFI_INVALID_PARAMETER    HartId is not a valid hart id
-	@retval EFI_ALREADY_STARTED      The hart is already running.
-	@retval other                    The start request failed for unknown reasons.
+                                    - It is not a valid physical address.
+                                    - The address is prohibited by PMP to run in
+                                      supervisor mode.
+  @retval EFI_INVALID_PARAMETER    HartId is not a valid hart id
+  @retval EFI_ALREADY_STARTED      The hart is already running.
+  @retval other                    The start request failed for unknown reasons.
 **/
 EFI_STATUS
 EFIAPI
@@ -169,7 +254,7 @@ SbiHartStop (
 
   Possible values for HartStatus are:
   0: STARTED
-	1: STOPPED
+  1: STOPPED
   2: START_REQUEST_PENDING
   3: STOP_REQUEST_PENDING
 
@@ -192,8 +277,8 @@ SbiHartGetStatus (
 /**
   Clear pending timer interrupt bit and set timer for next event after StimeValue.
 
-	To clear the timer without scheduling a timer event, set StimeValue to a
-	practically infinite value or mask the timer interrupt by clearing sie.STIE.
+  To clear the timer without scheduling a timer event, set StimeValue to a
+  practically infinite value or mask the timer interrupt by clearing sie.STIE.
 
   @param[in]  StimeValue           The time offset to the next scheduled timer interrupt.
 **/

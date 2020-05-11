@@ -49,7 +49,7 @@ PublishPeiMemory (
   MemoryBase = 0x80000000UL + 0x1000000UL;
   MemorySize = 0x40000000UL - 0x1000000UL; //1GB - 16MB
 
-  DEBUG((DEBUG_INFO, "%a: MemoryBase:0x%x MemorySize:%d\n", __FUNCTION__, MemoryBase, MemorySize));
+  DEBUG((DEBUG_INFO, "%a: MemoryBase:0x%x MemorySize:%x\n", __FUNCTION__, MemoryBase, MemorySize));
 
   //
   // Publish this memory to the PEI Core

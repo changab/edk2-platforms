@@ -21,7 +21,9 @@
 
 #define DEBUG_MSG_HART_INFO 0
 
+#if DEBUG_MSG_HART_INFO
 UINTN HartsIn = 0;
+#endif
 
 STATIC EFI_PEI_TEMPORARY_RAM_SUPPORT_PPI mTemporaryRamSupportPpi = {
   TemporaryRamMigration
@@ -335,7 +337,17 @@ DebutPrintFirmwareContext (
   DEBUG ((DEBUG_INFO, "%a: OpenSBI Firmware Context at 0x%x\n", __FUNCTION__, FirmwareContext));
   DEBUG ((DEBUG_INFO, "%a:              PEI Service at 0x%x\n\n", __FUNCTION__, FirmwareContext->PeiServiceTable));
 }
+/** Temporary RAM migration function.
 
+  This function migrates the data from temporary RAM to permanent
+  memory.
+
+  @param[in]  PeiServices           PEI service
+  @param[in]  TemporaryMemoryBase   Temporary memory base address
+  @param[in]  PermanentMemoryBase   Permanent memory base address
+  @param[in]  CopySize              Size to copy
+
+**/
 EFI_STATUS
 EFIAPI
 TemporaryRamMigration (
@@ -352,7 +364,7 @@ TemporaryRamMigration (
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
 
   DEBUG ((DEBUG_INFO,
-    "%a: TemporaryRamMigration(0x%Lx, 0x%Lx, 0x%Lx)\n",
+    "%a: Temp Mem Base:0x%Lx, Permanent Mem Base:0x%Lx, CopySize:0x%Lx\n",
     __FUNCTION__,
     TemporaryMemoryBase,
     PermanentMemoryBase,
@@ -372,7 +384,8 @@ TemporaryRamMigration (
   // Reset firmware context pointer
   //
   SbiGetFirmwareContext (&FirmwareContext);
-  SbiSetFirmwareContext (FirmwareContext + (unsigned long)((UINTN)NewStack - (UINTN)OldStack));
+  FirmwareContext = (VOID *)FirmwareContext + (unsigned long)((UINTN)NewStack - (UINTN)OldStack);
+  SbiSetFirmwareContext (FirmwareContext);
 
   //
   // Relocate PEI Service **
@@ -386,7 +399,12 @@ TemporaryRamMigration (
   return EFI_SUCCESS;
 }
 
-EFI_STATUS EFIAPI TemporaryRamDone (VOID)
+/** Temprary RAM done function.
+
+**/
+EFI_STATUS EFIAPI TemporaryRamDone (
+  VOID
+  )
 {
   DEBUG ((DEBUG_INFO, "%a: 2nd time PEI core, temporary ram done.\n", __FUNCTION__));
   return EFI_SUCCESS;
@@ -432,8 +450,8 @@ STATIC int SbiEcallFirmwareHandler (
 }
 
 struct sbi_ecall_extension FirmwareEcall = {
-  .extid_start = SBI_FW_EXT,
-  .extid_end = SBI_FW_EXT,
+  .extid_start = SBI_EDK2_FW_EXT,
+  .extid_end = SBI_EDK2_FW_EXT,
   .handle = SbiEcallFirmwareHandler,
 };
 
@@ -448,20 +466,34 @@ struct sbi_ecall_extension FirmwareEcall = {
 **/
 EFI_STATUS
 EFIAPI
-RegisterFirmwareSbiExtension()
+RegisterFirmwareSbiExtension (
+  VOID
+  )
 {
   UINTN Ret;
   Ret = sbi_ecall_register_extension(&FirmwareEcall);
   if (Ret) {
-    // Only fails if the extension ID is invalid or already is registered
+    //
+    // Only fails if the extension ID is invalid or already is registered.
+    //
     DEBUG ((DEBUG_ERROR, "Failed to register SBI Firmware Extension for EDK2\n"));
     ASSERT(FALSE);
   }
 
   return EFI_SUCCESS;
 }
+/** Transion from SEC phase to PEI phase.
 
-VOID EFIAPI PeiCore ()
+  This function transits to S-mode PEI phase from M-mode SEC phase.
+
+  @param[in]  BootHartId     Hardware thread ID of boot hart.
+  @param[in]  FuncArg1       Arg1 delivered from previous phase.
+
+**/
+VOID EFIAPI PeiCore (
+  IN  UINTN  BootHartId,
+  IN  UINTN  FuncArg1
+  )
 {
   EFI_SEC_PEI_HAND_OFF        SecCoreData;
   EFI_PEI_CORE_ENTRY_POINT    PeiCoreEntryPoint;
@@ -492,7 +524,6 @@ VOID EFIAPI PeiCore ()
     DEBUG ((DEBUG_INFO, "          Hart %d: 0x%x\n", HartId, ScratchSpace));
   }
   DEBUG ((DEBUG_INFO, "%a: Helloooo????\n", __FUNCTION__));
-
   ASSERT_EFI_ERROR (SbiGetMscratch (&ScratchSpace));
 
   //
@@ -522,7 +553,7 @@ VOID EFIAPI PeiCore ()
   //
   for (HartId = 0; HartId < FixedPcdGet32 (PcdHartCount); HartId ++) {
     ASSERT_EFI_ERROR (SbiGetMscratchHartid (HartId, &ScratchSpace));
-    FirmwareContext.HartSpecific [HartId] = 
+    FirmwareContext.HartSpecific [HartId] =
       (EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *)((UINT8 *)ScratchSpace - FIRMWARE_CONTEXT_HART_SPECIFIC_SIZE);
     DEBUG ((DEBUG_INFO, "%a: OpenSBI Hart %d Firmware Context Hart-specific at address: 0x%x\n",
             __FUNCTION__,
@@ -542,18 +573,36 @@ VOID EFIAPI PeiCore ()
 
   To register the SBI extension we stay in M-Mode and then transition here,
   rather than before in sbi_init.
+
+  @param[in]  ThisHartId     Hardware thread ID.
+  @param[in]  FuncArg1       Arg1 delivered from previous phase.
+
 **/
 VOID
 EFIAPI
 LaunchPeiCoreSMode (
-  IN  UINTN ThisHartId
+  IN  UINTN  ThisHartId,
+  IN  UINTN  FuncArg1
   )
 {
   RegisterFirmwareSbiExtension ();
 
-  sbi_hart_switch_mode(0, 0, (UINTN) PeiCore, PRV_S, FALSE);
+  sbi_hart_switch_mode(ThisHartId, FuncArg1, (UINTN) PeiCore, PRV_S, FALSE);
 }
 
+/**
+  Interface to invoke internal mode switch function.
+
+  To register the SBI extension we stay in M-Mode and then transition here,
+  rather than before in sbi_init.
+
+  @param[in]  FuncArg0       Arg0 to pass to next phase entry point address.
+  @param[in]  FuncArg1       Arg1 to pass to next phase entry point address.
+  @param[in]  NextAddr       Entry point of next phase.
+  @param[in]  NextMode       Privilege mode of next phase.
+  @param[in]  NextVirt       Next phase is in virtualiztion.
+
+**/
 VOID
 EFIAPI
 RiscVOpenSbiHartSwitchMode (
@@ -578,7 +627,7 @@ RiscVOpenSbiHartSwitchMode (
   |----Scratch ends                             |                                           |
   |                                             | sizeof (sbi_scratch)                      |
   |                                            _|                                           |
-  |----Scratch buffer start s                  <----- *Scratch                              |
+  |----Scratch buffer starts                   <----- *Scratch                              |
   |----Firmware Context Hart-specific ends     _                                            |
   |                                             |                                           |
   |                                             | FIRMWARE_CONTEXT_HART_SPECIFIC_SIZE       |
@@ -593,8 +642,14 @@ RiscVOpenSbiHartSwitchMode (
   |                                            _|                                       ____|
   |----Hart stack bottom
 
+  @param[in]  HartId       Hardware thread ID.
+  @param[in]  Scratch      Pointer to sbi_scratch structure.
+
 **/
-VOID EFIAPI SecCoreStartUpWithStack(UINTN HartId, struct sbi_scratch *Scratch)
+VOID EFIAPI SecCoreStartUpWithStack(
+  IN  UINTN HartId,
+  IN  struct sbi_scratch *Scratch
+  )
 {
   EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *HartFirmwareContext;
 
@@ -630,5 +685,8 @@ VOID EFIAPI SecCoreStartUpWithStack(UINTN HartId, struct sbi_scratch *Scratch)
     DEBUG ((DEBUG_INFO, "%a: Initializing OpenSBI library for booting hart\n", __FUNCTION__));
     sbi_init(Scratch);
   }
+  //
+  // Those non boot harts will be halted in sbi_init function.
+  //
   sbi_init(Scratch);
 }

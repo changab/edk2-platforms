@@ -27,7 +27,12 @@
 #define SBI_TIME_EXT                   0x54494D45
 #define SBI_IPI_EXT                    0x735049
 #define SBI_RFNC_EXT                   0x52464E43
-#define SBI_FW_EXT                     0x0A000001
+
+//
+// Below two definitions should be defined in OpenSBI.
+//
+#define SBI_EXT_FIRMWARE_CODE_BASE_START 0x0A000000
+#define SBI_EXT_FIRMWARE_CODE_BASE_END   0x0AFFFFFF
 
 #define SBI_GET_SPEC_VERSION_FUNC      0
 #define SBI_GET_IMPL_ID_FUNC           1
@@ -63,8 +68,7 @@ typedef struct {
     RISCV_UINT128          MachineImplId;          // Machine Implementation ID
     RISCV_HART_SWITCH_MODE HartSwitchMode;         // OpenSBI's function to switch the mode of a hart
 } EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC;
-
-#define FIRMWARE_CONTEXT_HART_SPECIFIC_SIZE  (64 * 7)
+#define FIRMWARE_CONTEXT_HART_SPECIFIC_SIZE  (64 * 8)
 
 typedef struct {
   VOID            *PeiServiceTable;       // PEI Service table
