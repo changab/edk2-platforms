@@ -548,6 +548,12 @@ VOID EFIAPI PeiCore (
              &FirmwareContext
              ));
   ThisSbiPlatform->firmware_context = (unsigned long)&FirmwareContext;
+
+  //
+  // Save Flattened Device tree in firmware context
+  //
+  FirmwareContext.FlattenedDeviceTree = FuncArg1;
+
   //
   // Set firmware context Hart-specific pointer
   //
