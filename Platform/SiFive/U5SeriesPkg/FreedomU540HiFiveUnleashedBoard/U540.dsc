@@ -511,6 +511,11 @@
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
 
+  #
+  # FAT filesystem + GPT/MBR partitioning + UDF filesystem
+  #
+  FatPkg/EnhancedFatDxe/Fat.inf
+  MdeModulePkg/Universal/Disk/UdfDxe/UdfDxe.inf
 
   ShellPkg/Application/Shell/Shell.inf {
     <LibraryClasses>
