@@ -149,6 +149,10 @@
   RiscVPlatformTimerLib|Platform/SiFive/U5SeriesPkg/Library/RiscVPlatformTimerLib/RiscVPlatformTimerLib.inf
   CpuExceptionHandlerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVExceptionLib/CpuExceptionHandlerDxeLib.inf
 
+
+  # Flattened Device Tree (FDT) access library
+  FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
+
 [LibraryClasses.common.SEC]
 !ifdef $(DEBUG_ON_SERIAL_PORT)
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
@@ -397,6 +401,7 @@
     <LibraryClasses>
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   }
+  Platform/RISC-V/PlatformPkg/Universal/FdtPeim/FdtPeim.inf
 
   #
   # DXE Phase modules

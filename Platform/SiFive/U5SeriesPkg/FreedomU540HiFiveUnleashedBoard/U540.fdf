@@ -1,7 +1,7 @@
 # @file
 #  Flash definition file on SiFive Freedom U540 HiFive Unleashed RISC-V platform
 #
-#  Copyright (c) 2019, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+#  Copyright (c) 2021, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -100,6 +100,7 @@ INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
 
 # RISC-V Platform PEI Driver
 INF  Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/Universal/Pei/PlatformPei/PlatformPei.inf
+INF  Platform/RISC-V/PlatformPkg/Universal/FdtPeim/FdtPeim.inf
 
 ################################################################################
 
