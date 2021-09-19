@@ -2,6 +2,7 @@
 #  Copyright (c) 2011-2012, ARM Limited. All rights reserved.
 #  Copyright (c) 2015-2016, Hisilicon Limited. All rights reserved.
 #  Copyright (c) 2015-2016, Linaro Limited. All rights reserved.
+#  (C) Copyright 2021 Hewlett Packard Enterprise Development LP<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -127,7 +128,7 @@
 
 [PcdsFixedAtBuild.common]
   gArmPlatformTokenSpaceGuid.PcdCoreCount|8
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
 

@@ -2,6 +2,7 @@
 #  Copyright (c) 2011-2012, ARM Limited. All rights reserved.
 #  Copyright (c) 2018, Hisilicon Limited. All rights reserved.
 #  Copyright (c) 2018, Linaro Limited. All rights reserved.
+#  (C) Copyright 2021 Hewlett Packard Enterprise Development LP<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -223,7 +224,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdSrIovSupport|FALSE
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x0
 
 ################################################################################
 #
