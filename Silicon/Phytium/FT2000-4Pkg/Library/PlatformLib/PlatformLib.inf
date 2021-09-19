@@ -2,6 +2,7 @@
 #  Library for Phytium Platform.
 #
 #  Copyright (C) 2020, Phytium Technology Co, Ltd. All rights reserved.<BR>
+#  (C) Copyright 2021 Hewlett Packard Enterprise Development LP<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -44,7 +45,7 @@
   gArmTokenSpaceGuid.PcdPciBusMax
   gArmTokenSpaceGuid.PcdPciIoBase
   gArmTokenSpaceGuid.PcdPciIoSize
-  gArmTokenSpaceGuid.PcdPciIoTranslation
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation
   gArmTokenSpaceGuid.PcdPciMmio32Base
   gArmTokenSpaceGuid.PcdPciMmio32Size
   gArmTokenSpaceGuid.PcdPciMmio32Translation

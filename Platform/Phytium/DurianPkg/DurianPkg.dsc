@@ -2,6 +2,7 @@
 # This package provides common open source Phytium Platform modules.
 #
 # Copyright (C) 2020, Phytium Technology Co, Ltd. All rights reserved.
+# (C) Copyright 2021 Hewlett Packard Enterprise Development LP<BR>
 #
 # SPDX-License-Identifier:BSD-2-Clause-Patent
 #
@@ -111,7 +112,7 @@
   gArmTokenSpaceGuid.PcdPciBusMax|255
   gArmTokenSpaceGuid.PcdPciIoBase|0x00000
   gArmTokenSpaceGuid.PcdPciIoSize|0xf00000
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0x50000000
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x50000000
   gArmTokenSpaceGuid.PcdPciMmio32Base|0x58000000
   gArmTokenSpaceGuid.PcdPciMmio32Size|0x28000000
   gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
