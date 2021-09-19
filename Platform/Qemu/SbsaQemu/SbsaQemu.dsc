@@ -1,6 +1,7 @@
 #
 #  Copyright (c) 2021, NUVIA Inc. All rights reserved.
 #  Copyright (c) 2019, Linaro Limited. All rights reserved.
+#  (C) Copyright 2021 Hewlett Packard Enterprise Development LP<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -486,7 +487,7 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarSize|0x10000000
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarLimit|0xFFFFFFFF
 
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0x7fff0000
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x7fff0000
   gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
   gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
   ## If TRUE, OvmfPkg/AcpiPlatformDxe will not wait for PCI

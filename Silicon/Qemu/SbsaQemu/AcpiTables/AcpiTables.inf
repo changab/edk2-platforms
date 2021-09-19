@@ -3,6 +3,7 @@
 #  ACPI table data and ASL sources required to boot the platform.
 #
 #  Copyright (c) 2020, Linaro Ltd. All rights reserved.
+#  (C) Copyright 2021 Hewlett Packard Enterprise Development LP<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -51,7 +52,7 @@
 
   gArmTokenSpaceGuid.PcdPciIoBase
   gArmTokenSpaceGuid.PcdPciIoSize
-  gArmTokenSpaceGuid.PcdPciIoTranslation
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciIoLimit
 
   gArmTokenSpaceGuid.PcdPciMmio32Base
