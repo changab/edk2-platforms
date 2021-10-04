@@ -24,13 +24,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-3c54701f893a27b071db2cefe2da7be6e79f9ce6
+          key: edk2-commit-8e89f038e52fb176eaac72f8974fe63ad4a7bb7e
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
-          repository: riscv/riscv-edk2
-          ref: 3c54701f893a27b071db2cefe2da7be6e79f9ce6 # branch riscv-to-upstream
+          repository: johnazoidberg/edk2
+          ref: 8e89f038e52fb176eaac72f8974fe63ad4a7bb7e # branch SEPTEMBER2021_RISCV_BRANCH
           submodules: true
           path: edk2
 
@@ -73,13 +73,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-3c54701f893a27b071db2cefe2da7be6e79f9ce6
+          key: edk2-commit-8e89f038e52fb176eaac72f8974fe63ad4a7bb7e
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
-          repository: riscv/riscv-edk2
-          ref: 3c54701f893a27b071db2cefe2da7be6e79f9ce6 # branch riscv-to-upstream
+          repository: johnazoidberg/edk2
+          ref: 8e89f038e52fb176eaac72f8974fe63ad4a7bb7e # branch SEPTEMBER2021_RISCV_BRANCH
           submodules: true
           path: edk2
 
@@ -127,13 +127,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-3c54701f893a27b071db2cefe2da7be6e79f9ce6
+          key: edk2-commit-8e89f038e52fb176eaac72f8974fe63ad4a7bb7e
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
-          repository: riscv/riscv-edk2
-          ref: 3c54701f893a27b071db2cefe2da7be6e79f9ce6 # branch riscv-to-upstream
+          repository: johnazoidberg/edk2
+          ref: 8e89f038e52fb176eaac72f8974fe63ad4a7bb7e # branch SEPTEMBER2021_RISCV_BRANCH
           submodules: true
           path: edk2
 
@@ -176,13 +176,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-3c54701f893a27b071db2cefe2da7be6e79f9ce6
+          key: edk2-commit-8e89f038e52fb176eaac72f8974fe63ad4a7bb7e
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
-          repository: riscv/riscv-edk2
-          ref: 3c54701f893a27b071db2cefe2da7be6e79f9ce6 # branch riscv-to-upstream
+          repository: johnazoidberg/edk2
+          ref: 8e89f038e52fb176eaac72f8974fe63ad4a7bb7e # branch SEPTEMBER2021_RISCV_BRANCH
           submodules: true
           path: edk2
 
