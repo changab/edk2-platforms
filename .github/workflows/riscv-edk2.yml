@@ -2,10 +2,10 @@ name: Docker
 
 on:
   # Run CI for this branch and all PRs
-  push:
-    branches:
-      - '*-gh-actions'
-      - riscv-to-upstream
+  #push:
+  #  branches:
+  #    - '*-gh-actions'
+  #    - riscv-to-upstream
   pull_request:
 
 jobs:
