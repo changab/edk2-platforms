@@ -290,7 +290,6 @@ jobs:
           wget https://danielschaefer.me/static/riscv/ci/rootfs.ext2
 
       - name: Prepare ESP
-        if: steps.cache-efistub-initrd-rootfs.outputs.cache-hit != 'true'
         run: |
           fallocate -l 64M esp.iso
           # Create GPT partition table and create one EFI System Partition
