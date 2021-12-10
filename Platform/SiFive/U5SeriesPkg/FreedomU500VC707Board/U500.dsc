@@ -107,7 +107,7 @@
   RealTimeClockLib|EmbeddedPkg//Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
 
 # RISC-V Core Library
-  RiscVOpensbiLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVOpensbiLib/RiscVOpensbiLib.inf
+  RiscVOpensbiLib|RiscVPkg/Library/RiscVOpensbiLib/RiscVOpensbiLib.inf
 
 !ifdef $(SOURCE_DEBUG_ENABLE)
   PeCoffExtraActionLib|SourceLevelDebugPkg/Library/PeCoffExtraActionLibDebug/PeCoffExtraActionLibDebug.inf
@@ -144,11 +144,11 @@
 !if $(SECURE_BOOT_ENABLE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
 !endif
-  RiscVCpuLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVCpuLib/RiscVCpuLib.inf
-  RiscVEdk2SbiLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVEdk2SbiLib/RiscVEdk2SbiLib.inf
+  RiscVCpuLib|RiscVPkg/Library/RiscVCpuLib/RiscVCpuLib.inf
+  RiscVEdk2SbiLib|RiscVPkg/Library/RiscVEdk2SbiLib/RiscVEdk2SbiLib.inf
   RiscVPlatformTimerLib|Platform/SiFive/U5SeriesPkg/Library/RiscVPlatformTimerLib/RiscVPlatformTimerLib.inf
-  MachineModeTimerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVReadMachineModeTimer/EmulatedMachineModeTimerLib/EmulatedMachineModeTimerLib.inf
-  CpuExceptionHandlerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVExceptionLib/CpuExceptionHandlerDxeLib.inf
+  MachineModeTimerLib|RiscVPkg/Library/RiscVReadMachineModeTimer/EmulatedMachineModeTimerLib/EmulatedMachineModeTimerLib.inf
+  CpuExceptionHandlerLib|RiscVPkg/Library/RiscVExceptionLib/CpuExceptionHandlerDxeLib.inf
 
   # Flattened Device Tree (FDT) access library
   FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
@@ -162,8 +162,8 @@
 
   ReportStatusCodeLib|MdeModulePkg/Library/PeiReportStatusCodeLib/PeiReportStatusCodeLib.inf
   ExtractGuidedSectionLib|MdePkg/Library/BaseExtractGuidedSectionLib/BaseExtractGuidedSectionLib.inf
-  Edk2OpensbiPlatformWrapperLib|Platform/RISC-V/PlatformPkg/Library/Edk2OpensbiPlatformWrapperLib/Edk2OpensbiPlatformWrapperLib.inf
-  RiscVSpecialPlatformLib|Platform/RISC-V/PlatformPkg/Library/RiscVSpecialPlatformLibNull/RiscVSpecialPlatformLibNull.inf
+  Edk2OpensbiPlatformWrapperLib|RiscVPlatformPkg/Library/Edk2OpensbiPlatformWrapperLib/Edk2OpensbiPlatformWrapperLib.inf
+  RiscVSpecialPlatformLib|RiscVPlatformPkg/Library/RiscVSpecialPlatformLibNull/RiscVSpecialPlatformLibNull.inf
 
 !ifdef $(SOURCE_DEBUG_ENABLE)
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/SecPeiDebugAgentLib.inf
@@ -174,12 +174,12 @@
 #
 # OpenSBi Platform Library
 #
-  RiscVOpensbiPlatformLib|Platform/RISC-V/PlatformPkg/Library/OpensbiPlatformLib/OpensbiPlatformLib.inf
+  RiscVOpensbiPlatformLib|RiscVPlatformPkg/Library/OpensbiPlatformLib/OpensbiPlatformLib.inf
 
 [LibraryClasses.common.PEI_CORE]
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
-  PeiServicesTablePointerLib|Silicon/RISC-V/ProcessorPkg/Library/PeiServicesTablePointerLibOpenSbi/PeiServicesTablePointerLibOpenSbi.inf
-  RiscVFirmwareContextLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVFirmwareContextSscratchLib/RiscVFirmwareContextSscratchLib.inf
+  PeiServicesTablePointerLib|RiscVPkg/Library/PeiServicesTablePointerLibOpenSbi/PeiServicesTablePointerLibOpenSbi.inf
+  RiscVFirmwareContextLib|RiscVPkg/Library/RiscVFirmwareContextSscratchLib/RiscVFirmwareContextSscratchLib.inf
   PeiServicesLib|MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
   MemoryAllocationLib|MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
   PeiCoreEntryPoint|MdePkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
@@ -193,13 +193,13 @@
 !endif
   PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
   # RISC-V platform PEI core entry point.
-  PeiCoreEntryPoint|Platform/RISC-V/PlatformPkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
+  PeiCoreEntryPoint|RiscVPlatformPkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
   PlatformSecPpiLib|Platform/SiFive/U5SeriesPkg/Library/PlatformSecPpiLib/PlatformSecPpiLib.inf
 
 [LibraryClasses.common.PEIM]
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
-  PeiServicesTablePointerLib|Silicon/RISC-V/ProcessorPkg/Library/PeiServicesTablePointerLibOpenSbi/PeiServicesTablePointerLibOpenSbi.inf
-  RiscVFirmwareContextLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVFirmwareContextSscratchLib/RiscVFirmwareContextSscratchLib.inf
+  PeiServicesTablePointerLib|RiscVPkg/Library/PeiServicesTablePointerLibOpenSbi/PeiServicesTablePointerLibOpenSbi.inf
+  RiscVFirmwareContextLib|RiscVPkg/Library/RiscVFirmwareContextSscratchLib/RiscVFirmwareContextSscratchLib.inf
   PeiServicesLib|MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
   MemoryAllocationLib|MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
   PeimEntryPoint|MdePkg/Library/PeimEntryPoint/PeimEntryPoint.inf
@@ -217,7 +217,7 @@
 !ifdef $(SOURCE_DEBUG_ENABLE)
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/SecPeiDebugAgentLib.inf
 !endif
-  FirmwareContextProcessorSpecificLib|Platform/RISC-V/PlatformPkg/Library/FirmwareContextProcessorSpecificLib/FirmwareContextProcessorSpecificLib.inf
+  FirmwareContextProcessorSpecificLib|RiscVPlatformPkg/Library/FirmwareContextProcessorSpecificLib/FirmwareContextProcessorSpecificLib.inf
 
 #
 # RISC-V core libraries
@@ -226,7 +226,7 @@
   RiscVCoreplexInfoLib|Platform/SiFive/U5SeriesPkg/Library/PeiCoreInfoHobLib/PeiCoreInfoHobLib.inf
 
 [LibraryClasses.common.DXE_CORE]
-  TimerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
+  TimerLib|RiscVPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
   HobLib|MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib.inf
   DxeCoreEntryPoint|MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf
   MemoryAllocationLib|MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib.inf
@@ -243,12 +243,12 @@
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-  TimerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
+  TimerLib|RiscVPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   DxeCoreEntryPoint|MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/RuntimeDxeReportStatusCodeLib/RuntimeDxeReportStatusCodeLib.inf
-  ResetSystemLib|Platform/RISC-V/PlatformPkg/Library/ResetSystemLib/ResetSystemLib.inf
+  ResetSystemLib|RiscVPlatformPkg/Library/ResetSystemLib/ResetSystemLib.inf
   UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
 !ifdef $(DEBUG_ON_SERIAL_PORT)
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
@@ -263,7 +263,7 @@
 
 [LibraryClasses.common.UEFI_DRIVER]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-  TimerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
+  TimerLib|RiscVPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   DxeCoreEntryPoint|MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
@@ -278,7 +278,7 @@
 
 [LibraryClasses.common.DXE_DRIVER]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-  TimerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
+  TimerLib|RiscVPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
@@ -292,13 +292,13 @@
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/DxeDebugAgentLib.inf
 !endif
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
-  PlatformBootManagerLib|Platform/RISC-V/PlatformPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
-  PlatformMemoryTestLib|Platform/RISC-V/PlatformPkg/Library/PlatformMemoryTestLibNull/PlatformMemoryTestLibNull.inf
-  PlatformUpdateProgressLib|Platform/RISC-V/PlatformPkg/Library/PlatformUpdateProgressLibNull/PlatformUpdateProgressLibNull.inf
+  PlatformBootManagerLib|RiscVPlatformPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
+  PlatformMemoryTestLib|RiscVPlatformPkg/Library/PlatformMemoryTestLibNull/PlatformMemoryTestLibNull.inf
+  PlatformUpdateProgressLib|RiscVPlatformPkg/Library/PlatformUpdateProgressLibNull/PlatformUpdateProgressLibNull.inf
 
 [LibraryClasses.common.UEFI_APPLICATION]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-  TimerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
+  TimerLib|RiscVPkg/Library/RiscVTimerLib/BaseRiscVTimerLib.inf
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
 !ifdef $(DEBUG_ON_SERIAL_PORT)
@@ -390,7 +390,7 @@
   #
   # SEC Phase modules
   #
-  Platform/RISC-V/PlatformPkg/Universal/Sec/SecMain.inf
+  RiscVPlatformPkg/Universal/Sec/SecMain.inf
 
   #
   # PEI Phase modules
@@ -407,12 +407,12 @@
     NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
   }
 
-  Platform/RISC-V/PlatformPkg/Universal/Pei/PlatformPei/PlatformPei.inf {
+  RiscVPlatformPkg/Universal/Pei/PlatformPei/PlatformPei.inf {
     <LibraryClasses>
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   }
 
-  Platform/RISC-V/PlatformPkg/Universal/FdtPeim/FdtPeim.inf
+  RiscVPlatformPkg/Universal/FdtPeim/FdtPeim.inf
 
   #
   # DXE Phase modules
@@ -464,8 +464,8 @@
   #
   # RISC-V Core module
   #
-  Silicon/RISC-V/ProcessorPkg/Universal/CpuDxe/CpuDxe.inf
-  Silicon/RISC-V/ProcessorPkg/Universal/SmbiosDxe/RiscVSmbiosDxe.inf
+  RiscVPkg/Universal/CpuDxe/CpuDxe.inf
+  RiscVPkg/Universal/SmbiosDxe/RiscVSmbiosDxe.inf
   MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
 
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
@@ -524,7 +524,7 @@
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
-  Silicon/RISC-V/ProcessorPkg/Universal/FdtDxe/FdtDxe.inf
+  RiscVPkg/Universal/FdtDxe/FdtDxe.inf
   #
   # FAT filesystem + GPT/MBR partitioning + UDF filesystem
   #
