@@ -26,7 +26,7 @@ IpmiSolActivating (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_TRANSPORT,
              IPMI_TRANSPORT_SOL_ACTIVATING,
              (VOID *)SolActivatingRequest,
@@ -49,7 +49,7 @@ IpmiSetSolConfigurationParameters (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_TRANSPORT,
              IPMI_TRANSPORT_SET_SOL_CONFIG_PARAM,
              (VOID *)SetConfigurationParametersRequest,
@@ -70,7 +70,7 @@ IpmiGetSolConfigurationParameters (
 {
   EFI_STATUS                   Status;
 
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_TRANSPORT,
              IPMI_TRANSPORT_GET_SOL_CONFIG_PARAM,
              (VOID *)GetConfigurationParametersRequest,
@@ -111,7 +111,7 @@ IpmiGetLanConfigurationParameters (
     return EFI_INVALID_PARAMETER;
   }
 
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_TRANSPORT,
              IPMI_TRANSPORT_GET_LAN_CONFIG_PARAMETERS,
              (UINT8 *)GetLanConfigurationParametersRequest,

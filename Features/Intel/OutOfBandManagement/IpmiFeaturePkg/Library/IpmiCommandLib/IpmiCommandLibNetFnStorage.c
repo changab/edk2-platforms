@@ -24,7 +24,7 @@ IpmiGetFruInventoryAreaInfo (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetFruInventoryAreaInfoResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_GET_FRU_INVENTORY_AREAINFO,
              (VOID *)GetFruInventoryAreaInfoRequest,
@@ -45,7 +45,7 @@ IpmiReadFruData (
 {
   EFI_STATUS                   Status;
 
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_READ_FRU_DATA,
              (VOID *)ReadFruDataRequest,
@@ -68,7 +68,7 @@ IpmiWriteFruData (
   UINT32                       DataSize;
 
   DataSize = sizeof(*WriteFruDataResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_WRITE_FRU_DATA,
              (VOID *)WriteFruDataRequest,
@@ -89,7 +89,7 @@ IpmiGetSelInfo (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetSelInfoResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_GET_SEL_INFO,
              NULL,
@@ -110,7 +110,7 @@ IpmiGetSelEntry (
 {
   EFI_STATUS                   Status;
 
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_GET_SEL_ENTRY,
              (VOID *)GetSelEntryRequest,
@@ -132,7 +132,7 @@ IpmiAddSelEntry (
   UINT32                       DataSize;
 
   DataSize = sizeof(*AddSelEntryResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_ADD_SEL_ENTRY,
              (VOID *)AddSelEntryRequest,
@@ -155,7 +155,7 @@ IpmiPartialAddSelEntry (
   UINT32                       DataSize;
 
   DataSize = sizeof(*PartialAddSelEntryResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_PARTIAL_ADD_SEL_ENTRY,
              (VOID *)PartialAddSelEntryRequest,
@@ -177,7 +177,7 @@ IpmiClearSel (
   UINT32                       DataSize;
 
   DataSize = sizeof(*ClearSelResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_CLEAR_SEL,
              (VOID *)ClearSelRequest,
@@ -198,7 +198,7 @@ IpmiGetSelTime (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetSelTimeResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_GET_SEL_TIME,
              NULL,
@@ -220,7 +220,7 @@ IpmiSetSelTime (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_SET_SEL_TIME,
              (VOID *)SetSelTimeRequest,
@@ -241,7 +241,7 @@ IpmiGetSdrRepositoryInfo (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetSdrRepositoryInfoResp);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_GET_SDR_REPOSITORY_INFO,
              NULL,
@@ -262,7 +262,7 @@ IpmiGetSdr (
 {
   EFI_STATUS                   Status;
 
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_GET_SDR,
              (VOID *)GetSdrRequest,

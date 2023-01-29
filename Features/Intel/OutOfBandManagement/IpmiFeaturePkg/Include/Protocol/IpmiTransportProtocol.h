@@ -63,7 +63,7 @@ EFI_STATUS
 //
 struct _IPMI_TRANSPORT {
   UINT64                      Revision;
-  IPMI_SEND_COMMAND           IpmiSubmitCommand;
+  IPMI_SEND_COMMAND           IpmiSendCommand;
   IPMI_GET_CHANNEL_STATUS     GetBmcStatus;
   EFI_HANDLE                  IpmiHandle;
   UINT8                       CompletionCode;
