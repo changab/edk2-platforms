@@ -193,7 +193,7 @@ UpdateBmcStatusOnResponse (
 **/
 EFI_STATUS
 EFIAPI
-IpmiSubmitCommand (
+IpmiSendCommand (
   IN     UINT8     NetFunction,
   IN     UINT8     Command,
   IN     UINT8     *RequestData,
@@ -222,7 +222,7 @@ IpmiSubmitCommand (
     }
 
     IpmiInstance->Signature                      = SM_IPMI_BMC_SIGNATURE;
-    IpmiInstance->KcsTimeoutPeriod               = PcdGet64(PcdIpmiKcsTimeoutPeriod); 
+    IpmiInstance->KcsTimeoutPeriod               = PcdGet64(PcdIpmiKcsTimeoutPeriod);
     IpmiInstance->SlaveAddress                   = PcdGet8(PcdIpmiBmcSlaveAddress);
     IpmiInstance->IpmiIoBase                     = PcdGet16(PcdIpmiIoBaseAddress);
     DEBUG((DEBUG_INFO,"IPMI KcsTimeoutPeriod=0x%x\n", IpmiInstance->KcsTimeoutPeriod));
@@ -269,7 +269,7 @@ IpmiSubmitCommand (
   }
 
   Status = SendDataToBmcPort (
-  	IpmiInstance->KcsTimeoutPeriod,
+    IpmiInstance->KcsTimeoutPeriod,
     IpmiInstance->IpmiIoBase,
     (UINT8 *)IpmiCommand,
     (UINT8)(RequestDataSize + EFI_IPMI_COMMAND_HEADER_SIZE)
@@ -287,7 +287,7 @@ IpmiSubmitCommand (
   //
   DataSize = MAX_TEMP_DATA;
   Status = ReceiveBmcDataFromPort (
-  	IpmiInstance->KcsTimeoutPeriod,
+    IpmiInstance->KcsTimeoutPeriod,
     IpmiInstance->IpmiIoBase,
     (UINT8 *)IpmiResponse,
     &DataSize
@@ -301,8 +301,8 @@ IpmiSubmitCommand (
   }
 
   //
-  // If we got this far without any error codes, but the DataSize is 0 then the 
-  // command response failed, so do not continue.  
+  // If we got this far without any error codes, but the DataSize is 0 then the
+  // command response failed, so do not continue.
   //
   if (DataSize < 3) {
     Status = EFI_DEVICE_ERROR;

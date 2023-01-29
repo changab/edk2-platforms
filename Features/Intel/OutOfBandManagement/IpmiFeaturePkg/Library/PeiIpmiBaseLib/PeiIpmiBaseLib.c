@@ -48,7 +48,7 @@ InitializeIpmiBase (
 
 **/
 EFI_STATUS
-IpmiSubmitCommand (
+IpmiSendCommand (
   IN UINT8        NetFunction,
   IN UINT8        Command,
   IN UINT8        *CommandData,
@@ -65,7 +65,7 @@ IpmiSubmitCommand (
     ASSERT_EFI_ERROR (Status);
     return Status;
   }
-  Status = IpmiTransport->IpmiSubmitCommand (
+  Status = IpmiTransport->IpmiSendCommand (
                             IpmiTransport,
                             NetFunction,
                             0,

@@ -59,7 +59,7 @@ EFI_STATUS
 //
 struct _PEI_IPMI_TRANSPORT_PPI {
   UINT64                      Revision;
-  PEI_IPMI_SEND_COMMAND       IpmiSubmitCommand;
+  PEI_IPMI_SEND_COMMAND       IpmiSendCommand;
   PEI_IPMI_GET_CHANNEL_STATUS GetBmcStatus;
 };
 

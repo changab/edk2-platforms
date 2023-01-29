@@ -23,7 +23,7 @@ IpmiGetChassisCapabilities (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetChassisCapabilitiesResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_CHASSIS,
              IPMI_CHASSIS_GET_CAPABILITIES,
              NULL,
@@ -44,7 +44,7 @@ IpmiGetChassisStatus (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetChassisStatusResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_CHASSIS,
              IPMI_CHASSIS_GET_STATUS,
              NULL,
@@ -66,7 +66,7 @@ IpmiChassisControl (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_CHASSIS,
              IPMI_CHASSIS_CONTROL,
              (VOID *)ChassisControlRequest,
@@ -88,7 +88,7 @@ IpmiSetPowerRestorePolicy (
   UINT32                       DataSize;
 
   DataSize = sizeof(*ChassisControlResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_CHASSIS,
              IPMI_CHASSIS_SET_POWER_RESTORE_POLICY,
              (VOID *)ChassisControlRequest,
@@ -110,7 +110,7 @@ IpmiSetSystemBootOptions (
   UINT32                       DataSize;
 
   DataSize = sizeof(*BootOptionsResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_CHASSIS,
              IPMI_CHASSIS_SET_SYSTEM_BOOT_OPTIONS,
              (VOID *)BootOptionsRequest,
@@ -132,7 +132,7 @@ IpmiGetSystemBootOptions (
   UINT32                       DataSize;
 
   DataSize = sizeof(*BootOptionsResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_CHASSIS,
              IPMI_CHASSIS_GET_SYSTEM_BOOT_OPTIONS,
              (VOID *)BootOptionsRequest,

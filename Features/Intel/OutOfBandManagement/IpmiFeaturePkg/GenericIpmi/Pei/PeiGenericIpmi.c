@@ -76,7 +76,7 @@ PeiInitializeIpmiKcsPhysicalLayer (
   mIpmiInstance->Signature                          = SM_IPMI_BMC_SIGNATURE;
   mIpmiInstance->SlaveAddress                       = BMC_SLAVE_ADDRESS;
   mIpmiInstance->BmcStatus                          = BMC_NOTREADY;
-  mIpmiInstance->IpmiTransportPpi.IpmiSubmitCommand = PeiIpmiSendCommand;
+  mIpmiInstance->IpmiTransportPpi.IpmiSendCommand   = PeiIpmiSendCommand;
   mIpmiInstance->IpmiTransportPpi.GetBmcStatus      = PeiGetIpmiBmcStatus;
 
   mIpmiInstance->PeiIpmiBmcDataDesc.Flags         = EFI_PEI_PPI_DESCRIPTOR_PPI | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST;

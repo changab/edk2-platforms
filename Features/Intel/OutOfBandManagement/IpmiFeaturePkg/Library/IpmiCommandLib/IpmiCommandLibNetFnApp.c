@@ -24,7 +24,7 @@ IpmiGetDeviceId (
   UINT32                       DataSize;
 
   DataSize = sizeof(*DeviceId);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_DEVICE_ID,
              NULL,
@@ -45,7 +45,7 @@ IpmiGetSelfTestResult (
   UINT32                       DataSize;
 
   DataSize = sizeof(*SelfTestResult);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_SELFTEST_RESULTS,
              NULL,
@@ -66,7 +66,7 @@ IpmiResetWatchdogTimer (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_RESET_WATCHDOG_TIMER,
              NULL,
@@ -88,7 +88,7 @@ IpmiSetWatchdogTimer (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_SET_WATCHDOG_TIMER,
              (VOID *)SetWatchdogTimer,
@@ -109,7 +109,7 @@ IpmiGetWatchdogTimer (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetWatchdogTimer);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_WATCHDOG_TIMER,
              NULL,
@@ -131,7 +131,7 @@ IpmiSetBmcGlobalEnables (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_SET_BMC_GLOBAL_ENABLES,
              (VOID *)SetBmcGlobalEnables,
@@ -152,7 +152,7 @@ IpmiGetBmcGlobalEnables (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetBmcGlobalEnables);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_BMC_GLOBAL_ENABLES,
              NULL,
@@ -174,7 +174,7 @@ IpmiClearMessageFlags (
   UINT32                       DataSize;
 
   DataSize = sizeof(*CompletionCode);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_CLEAR_MESSAGE_FLAGS,
              (VOID *)ClearMessageFlagsRequest,
@@ -195,7 +195,7 @@ IpmiGetMessageFlags (
   UINT32                       DataSize;
 
   DataSize = sizeof(*GetMessageFlagsResponse);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_MESSAGE_FLAGS,
              NULL,
@@ -215,7 +215,7 @@ IpmiGetMessage (
 {
   EFI_STATUS                   Status;
 
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_MESSAGE,
              NULL,
@@ -237,7 +237,7 @@ IpmiSendMessage (
 {
   EFI_STATUS                   Status;
 
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_SEND_MESSAGE,
              (VOID *)SendMessageRequest,
@@ -274,7 +274,7 @@ IpmiGetSystemUuid (
   }
   RequestSize = 0;
   ResponseSize = sizeof (IPMI_GET_SYSTEM_UUID_RESPONSE);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_SYSTEM_GUID,
              (VOID *)NULL,
@@ -323,7 +323,7 @@ IpmiGetChannelInfo (
   }
 
   *GetChannelInfoResponseSize = sizeof (IPMI_GET_CHANNEL_INFO_RESPONSE);
-  Status = IpmiSubmitCommand (
+  Status = IpmiSendCommand (
              IPMI_NETFN_APP,
              IPMI_APP_GET_CHANNEL_INFO,
              (UINT8 *)GetChannelInfoRequest,

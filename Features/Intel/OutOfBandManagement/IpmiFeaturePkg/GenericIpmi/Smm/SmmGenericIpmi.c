@@ -166,7 +166,7 @@ Returns:
     mIpmiInstance->Signature                        = SM_IPMI_BMC_SIGNATURE;
     mIpmiInstance->SlaveAddress                     = BMC_SLAVE_ADDRESS;
     mIpmiInstance->BmcStatus                        = BMC_NOTREADY;
-    mIpmiInstance->IpmiTransport.IpmiSubmitCommand  = IpmiSendCommand;
+    mIpmiInstance->IpmiTransport.IpmiSendCommand    = IpmiSendCommand;
     mIpmiInstance->IpmiTransport.GetBmcStatus       = IpmiGetBmcStatus;
 
     DEBUG ((DEBUG_INFO,"IPMI: Waiting for Getting BMC DID in SMM \n"));
