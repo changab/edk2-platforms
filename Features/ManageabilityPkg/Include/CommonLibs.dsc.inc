@@ -38,3 +38,15 @@
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
   ArmSoftFloatLib|ArmPkg/Library/ArmSoftFloatLib/ArmSoftFloatLib.inf
 
+#
+# IPMI Libraries, will move these libraries to under ManageabilityPkg later.
+#
+[LibraryClasses.common.DXE_DRIVER]
+  IpmiBaseLib|IpmiFeaturePkg/Library/IpmiBaseLib/IpmiBaseLib.inf
+
+[LibraryClasses.common.PEIM]
+  IpmiBaseLib|IpmiFeaturePkg/Library/PeiIpmiBaseLib/PeiIpmiBaseLib.inf
+
+[LibraryClasses.common.DXE_SMM_DRIVER]
+  IpmiBaseLib|IpmiFeaturePkg/Library/SmmIpmiBaseLib/SmmIpmiBaseLib.inf
+

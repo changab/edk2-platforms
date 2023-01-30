@@ -21,3 +21,7 @@
 !include MdePkg/MdeLibs.dsc.inc
 !include ManageabilityPkg/Include/CommonLibs.dsc.inc
 
+[Components]
+  ManageabilityPkg/Universal/IpmiProtocol/Dxe/IpmiProtocolDxe.inf
+  ManageabilityPkg/Universal/IpmiProtocol/Smm/IpmiProtocolSmm.inf
+  ManageabilityPkg/Universal/IpmiProtocol/Pei/IpmiPpiPei.inf
