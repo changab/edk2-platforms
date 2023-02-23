@@ -16,6 +16,9 @@
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
   ArmSoftFloatLib|ArmPkg/Library/ArmSoftFloatLib/ArmSoftFloatLib.inf
 
+[Components]
+  ManageabilityPkg/Library/ManageabilityTransportKcsLib/Dxe/DxeManageabilityTransportKcs.inf
+
 [Components.IA32]
   ManageabilityPkg/Universal/IpmiProtocol/Pei/IpmiPpiPei.inf
 
