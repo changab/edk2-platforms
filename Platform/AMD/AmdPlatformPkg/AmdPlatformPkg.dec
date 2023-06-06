@@ -17,5 +17,11 @@
 [Includes]
   Include
 
+[LibraryClasses]
+  ##  @libraryclass AMD SMM core platform hook library
+  #   Provide the functions to register hook before and
+  #   after SMM dispatcher.
+  SmmCorePlatformHookLib|Include/Library/AmdSmmCorePlatformHookLib.h
+
 [Guids]
   gAmdPlatformPkgTokenSpaceGuid   = { 0x663DE733, 0x70E0, 0x4D37, { 0xBB, 0x30, 0x7D, 0x9E, 0xAF, 0x9B, 0xDA, 0xE9 }}

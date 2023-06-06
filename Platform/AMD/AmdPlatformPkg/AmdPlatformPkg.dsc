@@ -20,3 +20,10 @@
 
 [Packages]
   AmdPlatformPkg/AmdPlatformPkg.dec
+
+[LibraryClasses.Common.SMM_CORE]
+  SmmCorePlatformHookLib|AmdPlatformPkg/Library/SmmCorePlatformHookLib/SmmCorePlatformHookLib.inf
+
+[Components]
+  AmdPlatformPkg/Library/SmmCorePlatformHookLib/SmmCorePlatformHookLib.inf
+
